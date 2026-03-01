@@ -1,4 +1,5 @@
 import { PrismaClient } from "../../generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 // Singleton pattern — prevent multiple Prisma Client instances in dev (hot reload)
 const globalForPrisma = globalThis as unknown as {
@@ -6,9 +7,8 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function makePrismaClient() {
-  return new PrismaClient({
-    accelerateUrl: process.env.DATABASE_URL,
-  });
+  const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+  return new PrismaClient({ adapter });
 }
 
 // Always create a fresh client in production; reuse singleton in dev
