@@ -1,5 +1,6 @@
 import { PrismaClient } from "../../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 
 // Singleton pattern — prevent multiple Prisma Client instances in dev (hot reload)
 const globalForPrisma = globalThis as unknown as {
@@ -14,7 +15,11 @@ function makePrismaClient() {
       "Add it to Vercel: Settings → Environment Variables."
     );
   }
-  const adapter = new PrismaPg({ connectionString });
+  const pool = new Pool({
+    connectionString,
+    ssl: { rejectUnauthorized: false },
+  });
+  const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter });
 }
 
