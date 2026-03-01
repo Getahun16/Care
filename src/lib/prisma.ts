@@ -7,17 +7,29 @@ const globalForPrisma = globalThis as unknown as {
   prisma: ReturnType<typeof makePrismaClient> | undefined;
 };
 
+/**
+ * Strip Prisma-engine-only URL parameters that pg.Pool doesn't understand.
+ * Passing ?pgbouncer=true&connection_limit=1 to PostgreSQL causes P1017.
+ */
+function cleanDatabaseUrl(url: string): string {
+  const parsed = new URL(url);
+  parsed.searchParams.delete("pgbouncer");
+  parsed.searchParams.delete("connection_limit");
+  return parsed.toString();
+}
+
 function makePrismaClient() {
-  const connectionString = process.env.DATABASE_URL;
-  if (!connectionString) {
+  const rawUrl = process.env.DATABASE_URL;
+  if (!rawUrl) {
     throw new Error(
       "DATABASE_URL environment variable is not set. " +
       "Add it to Vercel: Settings → Environment Variables."
     );
   }
   const pool = new Pool({
-    connectionString,
+    connectionString: cleanDatabaseUrl(rawUrl),
     ssl: { rejectUnauthorized: false },
+    max: 5,
   });
   const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter });
