@@ -1,5 +1,7 @@
 ﻿import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
+
+export const dynamic = 'force-dynamic';
 import Impact from "@/views/Impact";
 
 export const metadata: Metadata = {
