@@ -36,6 +36,7 @@
   ],
   "exclude": [
     "node_modules",
+    "src/test",
     "src/App.tsx",
     "src/main.tsx",
     "src/vite-env.d.ts",
