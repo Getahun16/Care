@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Circular Coffee – Dark Mode as Default */
+    --background: 20 15% 8%;
+    --foreground: 40 20% 92%;
+
+    --card: 20 12% 11%;
+    --card-foreground: 40 20% 92%;
+
+    --popover: 20 12% 11%;
+    --popover-foreground: 40 20% 92%;
+
+    /* Deep Coffee Brown */
+    --primary: 9 37% 24%;
+    --primary-foreground: 40 30% 95%;
+
+    /* Leaf Green */
+    --secondary: 122 47% 30%;
+    --secondary-foreground: 40 30% 95%;
+
+    --muted: 20 12% 16%;
+    --muted-foreground: 40 10% 55%;
+
+    --accent: 122 35% 25%;
+    --accent-foreground: 40 30% 95%;
+
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 40 30% 95%;
+
+    --border: 20 12% 20%;
+    --input: 20 12% 16%;
+    --ring: 9 37% 34%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --coffee-brown: 9 37% 24%;
+    --coffee-light: 22 40% 40%;
+    --leaf-green: 122 47% 30%;
+    --leaf-bright: 122 50% 38%;
+    --beige: 40 40% 92%;
+    --charcoal: 20 15% 8%;
+    --charcoal-mid: 20 12% 13%;
+
+    --gradient-hero: linear-gradient(160deg, hsl(20 15% 6%) 0%, hsl(9 25% 14%) 50%, hsl(122 20% 12%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(20 12% 12%), hsl(20 12% 9%));
+    --gradient-green: linear-gradient(135deg, hsl(122 47% 22%), hsl(122 40% 16%));
+    --gradient-coffee: linear-gradient(135deg, hsl(9 37% 22%), hsl(22 35% 16%));
+    --shadow-glow: 0 0 40px hsl(122 47% 30% / 0.15);
+    --shadow-card: 0 4px 24px hsl(0 0% 0% / 0.4);
+    --shadow-elevated: 0 8px 40px hsl(0 0% 0% / 0.5);
+
+    --sidebar-background: 20 12% 10%;
+    --sidebar-foreground: 40 20% 85%;
+    --sidebar-primary: 122 47% 30%;
+    --sidebar-primary-foreground: 40 30% 95%;
+    --sidebar-accent: 20 12% 15%;
+    --sidebar-accent-foreground: 40 20% 85%;
+    --sidebar-border: 20 12% 18%;
+    --sidebar-ring: 122 47% 30%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer utilities {
+  .font-serif {
+    font-family: 'Playfair Display', serif;
+  }
+
+  .font-sans {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+
+  .gradient-green {
+    background: var(--gradient-green);
+  }
+
+  .gradient-coffee {
+    background: var(--gradient-coffee);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .text-gradient-green {
+    background: linear-gradient(135deg, hsl(var(--leaf-bright)), hsl(var(--beige)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-coffee {
+    background: linear-gradient(135deg, hsl(var(--coffee-light)), hsl(var(--beige)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .border-gradient {
+    border: 1px solid hsl(var(--border));
+    background: linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box,
+                linear-gradient(135deg, hsl(var(--leaf-green) / 0.4), transparent, hsl(var(--coffee-brown) / 0.3)) border-box;
+    border: 1px solid transparent;
+  }
+
+  .glass-card {
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border) / 0.6);
+  }
+
+  .pillar-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .pillar-hover:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .nav-link {
+    @apply relative transition-colors duration-200;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300;
+    background: hsl(var(--leaf-bright));
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    @apply w-full;
+  }
+
+  .stat-counter {
+    font-family: 'Playfair Display', serif;
+    @apply text-5xl font-bold;
+    color: hsl(var(--leaf-bright));
+  }
+
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
+  }
+
+  .tag-pill {
+    @apply text-xs font-medium px-3 py-1 rounded-full;
+    background: hsl(var(--leaf-green) / 0.2);
+    color: hsl(var(--leaf-bright));
+    border: 1px solid hsl(var(--leaf-green) / 0.3);
+  }
+
+  .tag-coffee {
+    background: hsl(var(--coffee-brown) / 0.3);
+    color: hsl(var(--coffee-light));
+    border: 1px solid hsl(var(--coffee-brown) / 0.4);
+  }
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes counter-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 20s linear infinite;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+  }
+
+  .animate-fade-in-up-delay {
+    animation: fade-in-up 0.8s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-in-up-delay-2 {
+    animation: fade-in-up 0.8s ease-out 0.4s forwards;
+    opacity: 0;
+  }
+
+  .animate-pulse-ring::before {
+    content: '';
+    @apply absolute inset-0 rounded-full;
+    animation: pulse-ring 2s ease-out infinite;
+    background: hsl(var(--leaf-green) / 0.3);
+  }
+}

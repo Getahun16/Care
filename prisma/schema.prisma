@@ -1,0 +1,185 @@
+// Prisma schema for Circular Coffee Hub
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Admin users ──────────────────────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  role         Role     @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+}
+
+// ─── Publications ─────────────────────────────────────────────────────────────
+
+model Publication {
+  id        String            @id @default(cuid())
+  title     String
+  authors   String
+  year      Int
+  type      PublicationType
+  pillar    ResearchPillar?
+  status    PublicationStatus @default(DRAFT)
+  abstract  String?
+  url       String?
+  doi       String?
+  pdfUrl    String?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+}
+
+enum PublicationType {
+  JOURNAL
+  POLICY_BRIEF
+  MANUAL
+  CONFERENCE
+  REPORT
+}
+
+enum PublicationStatus {
+  DRAFT
+  IN_REVIEW
+  PUBLISHED
+}
+
+// ─── Team members ─────────────────────────────────────────────────────────────
+
+model TeamMember {
+  id          String         @id @default(cuid())
+  name        String
+  role        String
+  institution String
+  country     String
+  pillar      ResearchPillar?
+  bio         String?
+  email       String?
+  imageUrl    String?
+  active      Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+// ─── News & Events ────────────────────────────────────────────────────────────
+
+model NewsEvent {
+  id        String          @id @default(cuid())
+  title     String
+  type      NewsEventType
+  date      DateTime
+  status    NewsEventStatus @default(DRAFT)
+  excerpt   String?
+  content   String?
+  location  String?
+  imageUrl  String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+enum NewsEventType {
+  NEWS
+  EVENT
+}
+
+enum NewsEventStatus {
+  DRAFT
+  UPCOMING
+  PUBLISHED
+  PAST
+}
+
+// ─── Research projects ────────────────────────────────────────────────────────
+
+model ResearchProject {
+  id          String            @id @default(cuid())
+  title       String
+  pillar      ResearchPillar
+  status      ResearchStatus    @default(ACTIVE)
+  lead        String?
+  description String?
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+enum ResearchPillar {
+  SOIL_HEALTH
+  WASTE_VALORIZATION
+  SOCIO_ECONOMIC
+}
+
+enum ResearchStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+// ─── Contact messages ─────────────────────────────────────────────────────────
+
+model ContactMessage {
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  organisation String?
+  subject      String
+  body         String
+  read         Boolean  @default(false)
+  archived     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+}
+
+// ─── Newsletter subscribers ───────────────────────────────────────────────────
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  source    String?  // "contact_form" | "sidebar_widget" | "homepage"
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Partners ─────────────────────────────────────────────────────────────────
+
+model Partner {
+  id        String   @id @default(cuid())
+  name      String
+  logoUrl   String?
+  website   String?
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Impact metrics ───────────────────────────────────────────────────────────
+
+model ImpactMetric {
+  id        String   @id @default(cuid())
+  label     String
+  value     String
+  pillar    ResearchPillar?
+  year      Int
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
