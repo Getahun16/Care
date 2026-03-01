@@ -29,10 +29,11 @@ function makePrismaClient() {
   const pool = new Pool({
     connectionString: cleanDatabaseUrl(rawUrl),
     ssl: { rejectUnauthorized: false },
-    max: 2,
-    min: 0,                    // don't hold idle connections open
-    idleTimeoutMillis: 5000,   // destroy idle connections after 5s (before pgbouncer/firewall drops them)
+    max: 1,
+    min: 0,
+    idleTimeoutMillis: 1,       // destroy connection immediately after release
     connectionTimeoutMillis: 30000,
+    allowExitOnIdle: true,
   });
   const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter });
