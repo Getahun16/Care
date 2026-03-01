@@ -9,7 +9,7 @@ const globalForPrisma = globalThis as unknown as {
 
 /**
  * Strip Prisma-engine-only URL parameters that pg.Pool doesn't understand.
- * Passing ?pgbouncer=true&connection_limit=1 to PostgreSQL causes P1017.
+ * Passing ?pgbouncer=true&connection_limit=1 to PostgreSQL causes P1001/P1017.
  */
 function cleanDatabaseUrl(url: string): string {
   const parsed = new URL(url);
@@ -30,6 +30,10 @@ function makePrismaClient() {
     connectionString: cleanDatabaseUrl(rawUrl),
     ssl: { rejectUnauthorized: false },
     max: 5,
+    // Release connections immediately when idle — prevents pgbouncer from
+    // forcefully closing stale pooled connections (P1017).
+    idleTimeoutMillis: 0,
+    connectionTimeoutMillis: 10000,
   });
   const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter });
